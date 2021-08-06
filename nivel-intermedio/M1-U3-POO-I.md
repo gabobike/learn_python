@@ -281,7 +281,7 @@ Al trabajar con herencia múltiples, debemos tener mucho cuidado, para no comete
 
 Estas cuestiones las iremos resolviendo con ejemplos y al estudiar el uso de **"super"**, ahora nos ocuparemos de un problema denominado **"problamente del diamante"** el cual se da cuando una clase tiene dos superclases, las cuales tiene una superclase en común. Veamos el siguiente esquema, de tres niveles, en donde la Clase3 hereda de la Clase2a y Clase2b en donde estas dos últimas a su vez heredan de la Clase1:
 
-![image-20210806015541592](.images/image-20210806015541592.png)
+![image-20210806015541592](./images/image-20210806015541592.png)
 
 Supongamos ahora que generamos una instacia de la Clase3 e implementamos un método declaro en la Clase1, ¿ La herencia se lleva a cabo a través de la rama que contiene a Clase2a o la que contiene la Clase2b ?
 
