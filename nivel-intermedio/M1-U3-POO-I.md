@@ -250,7 +250,75 @@ Salida:
 
 Cuando trabajamos con programación orientada a objetos POO, una de las cosas más importantes a tener en cuenta, es la forma en que creamos dichos objetos. Como veremos un poco más adelante la forma correcta de crear objetos es mediante la utilización de un método (función) `__init__` el cual es un método reservado de Python que cumple la función de contructor de la clase a la cual se encuentra asociada, es decir una función de constructor de la clase a la cual se encuentra asociada, es decir una función destinada a inicializar (crear) los objetos de la clase utilizada.
 
+la funcion `__init__` puede tomar diferente tipo de argumentos, y para su correcta utilización, debemos comprender como vimos, que cada clase de Python hereda en forma implícita de la clase "object", es decir que "object" es una superclase de cada clase definida en Python. si no implementamos un método `__init__` en nuestra clase, por defecto se ejecuta el método `__init__` de la clase object.
 
+Es posible, aunque no es la forma correcta crear variables de instancia sin utilizar un constructor como ejemplo veamos el siguiente caso en donde podemos ver que para trabajar con variables de instancia se utiliza dentro de la clase la palabra clace "self".
 
+**init1.py**
 
+```python
+class Comentario:
+    def imprimir(self):
+        print(self.texto)
+        
+objeto = Comentario()
+objeto.texto = "Hola variable de instancia"
+objeto.imprimir()
+input()
+```
 
+**3. Herencia múltiple**
+
+Python soporta herencia múltiple, es decir que una clase puede heredar de más de una clase, para indicarlo, lo unico que tenemos que hacer es separar mediante una coma cada una de las clases de las cuales se hereda en la definición de la clase. Así podríamos tener la clase "Comentario" que tiene "N" superclases de la siguiente forma.
+
+```python
+class Comentario(Superclase1, Superclase2,......,SuperclaseN):
+def imprimir(self)
+print(self.texto)
+```
+
+Al trabajar con herencia múltiples, debemos tener mucho cuidado, para no cometer errores, ya que si dos superclases poseen el mismo nombre de método en su definición, ¿ de cuál de las dos hereda el método la clase hija ?.
+
+Estas cuestiones las iremos resolviendo con ejemplos y al estudiar el uso de **"super"**, ahora nos ocuparemos de un problema denominado **"problamente del diamante"** el cual se da cuando una clase tiene dos superclases, las cuales tiene una superclase en común. Veamos el siguiente esquema, de tres niveles, en donde la Clase3 hereda de la Clase2a y Clase2b en donde estas dos últimas a su vez heredan de la Clase1:
+
+![image-20210806015541592](.images/image-20210806015541592.png)
+
+Supongamos ahora que generamos una instacia de la Clase3 e implementamos un método declaro en la Clase1, ¿ La herencia se lleva a cabo a través de la rama que contiene a Clase2a o la que contiene la Clase2b ?
+
+Python toma la convención de crear una lista de clase que:
+
+1- Busca de izquierda a derecha, y de abajo hacia arriba.
+
+Clase3, Clase2a Clase1, Clase2b Clase1
+
+2- Se eliminan todas las apariciones repetidas de una clase salvo la última.
+
+Clase3, Clase2a Clase1, Clase2b Clase1
+
+queda: Clase3, Clase2a Clase2b, Clase1
+
+Esto lo podemos ver si utilizamos el método reservado `__mro__`, veamoslo en el siguiente ejemplo:
+
+**herenciaMultiple.py**
+
+```python
+class Clase1():
+    def tipo(self):
+        print("Soy clase1")
+        
+class Clase2a(Clase1):
+    def tipo(self):
+        print("Soy clase2a")
+
+class Clase2b(Clase1):
+    def tipo(self):
+        print("Soy clase2b")
+        
+class Clase3(Clase2a, Clase2b):
+    def tipo(self):
+        print("Soy clase3")
+        
+print(Clase3.__mro__)        
+```
+
+Como era esperar la salida nos retorna:
