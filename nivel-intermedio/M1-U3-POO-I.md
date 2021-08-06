@@ -2,11 +2,11 @@
 
 Tematicas
 
-1. Introduccion a POO
-2. La clase object.
-3. Metodo __init__  ().
-4. Herencia múltiple.
-5. Uso de super.
+1. **Introduccion a POO**
+2. **La clase object.**
+3. **Metodo init  ().**
+4. **Herencia múltiple.**
+5. **Uso de super.**
 
 **1- Introducción a POO**
 
@@ -322,3 +322,156 @@ print(Clase3.__mro__)
 ```
 
 Como era esperar la salida nos retorna:
+
+------------
+
+**4. Uso de super.**
+
+Cuando queremos invocar a un método de una superclase desde una clase hija, podemos utilizar la palabra reservada "super", veamos un ejemplo:
+
+**super.py**
+
+```python
+class Vehiculo(object):
+    def tipo(self):
+        print("Dos ruedas")
+
+class Material(object):
+    def tipo(self):
+        print("plastico")
+        
+class Moto(Vehiculo, Material):
+    def modelo(self):
+        print("Modelo 1")
+        super(Moto, self).tipo()
+        super().tipo()
+        Material.tipo(self)
+        Vehiculo.tipo(self)
+        
+class Bicicleta(Material, Vehiculo):
+    def modelo(self):
+        print("Modelo 2")
+        super(Bicicleta, self).tipo()
+        super().tipo()
+        Material.tipo(self)
+        Vehiculo.tipo(self)
+
+print("----------Prioridad Clases----------")
+print(Moto.__moro__)
+print(Bicicleta__mro__)
+print("----------Para objeto 1----------")
+objeto1 = Moto()
+objeto1.modelo()
+objeto1.tipo()
+print("----------Para objeto 2----------")
+objeto2 = Bicicleta()
+objeto2.modelo()
+objeto2.tipo()
+```
+
+La salida nos retorna: 
+
+--------------------
+
+**Nota:** En python 3, la sintaxis se simplifica de super(ClaseHija, self). `__init__`() a  super().__init().
+
+**Nota**: En python 3 podemos llamar al método de la clase padre desde dentro de la clase hija, directamente indicando el nombre de la clase padre de la cual queremos heredar, y con notación de punto el nombre del método a utilizar:
+
+Ejemplo: **Vehiculo.tipo(self)**
+
+**Tener en cuenta al usar "super" con argunmentos.**
+
+Tenemos que tener cuidado cuando trabajamos con argumentos, ya que en ocasiones se pueden dar casos en los cuales se pueden perder argumentos por el cambio y dejar de estar presentes clases que los requieren. En el ejemplo siguiente si la clase Hijo requiere argumentos, estos van a tener que ser ingresados y van a ser pasados a la clase Padre, dado que la clase AbueloPaterno no los requiere, estos se pierden y cuando la clase Madre los requiere ya no están disponibles.
+
+![image-20210806031609473](image-20210806031609473.png)
+
+El código del esquema anterior queda como sigue:
+
+```python
+class AbueloPaterno(object):
+    def __init__(self):
+        print("AbueloPaterno")
+        super(AbueloPaterno, self).__init__()
+        
+class AbueloMaterno(object):
+    def __init__(self):
+        print("AbueloMaterno")
+        super(AbueloMaterno, self).__init__()
+        
+class Padre(AbueloPaterno):
+    def __init__(self, arg):
+        print("Padre","arg =",arg)
+        super(Padre, self).__init__()
+        
+class Madre(AbueloMaterno):
+    def __init__(self, arg):
+        print("Madre","arg =",arg)
+        super(Madre, self).__init__()
+        
+class Hijo(Padre, Madre):
+    def __init__(self, arg):
+        print("Hijo","arg =",arg)
+        super(Hijo, self).__init__(arg)
+        
+objeto = Hijo("celeste")      
+        
+```
+
+Para corregir este problema, lo que podemos hacer es utilizar el * y ** para permitir que las superclases permitan el pasaje de argumentos, aún cuando ellas no los requieran.
+
+**super2.py**
+
+```python
+class AbueloPaterno(object):
+    def __init__(self, *args, **kwargs):
+        print("AbueloPaterno")
+        super(AbueloPaterno, self).__init__(*args, **kwargs)
+        
+class AbueloMaterno(object):
+    def __init__(self, *args, **kwargs):
+        print("AbueloMaterno")
+        super(AbueloMaterno, self).__init__(*args, **kwargs)
+        
+class Padre(AbueloPaterno):
+    def __init__(self, arg, *args, **kwargs):
+        print("Padre","arg =",arg)
+        super(Padre, self).__init__(arg, *args, **kwargs)
+        
+class Madre(AbueloMaterno):
+    def __init__(self, arg):
+        print("Madre","arg =",arg)
+        super(Madre, self).__init__(*args, **kwargs)
+        
+class Hijo(Padre, Madre):
+    def __init__(self, arg, *args, **kwargs):
+        print("Hijo","arg =",arg)
+        super(Hijo, self).__init__(arg, *args, **kwargs)
+        
+objeto = Hijo("celeste")
+```
+
+
+
+
+
+
+
+
+
+**Bibliografía utilizada y sugerida**
+
+**Libro**
+
+**Programming Python 5th Edition – Mark Lutz – O'Reilly 2013**
+
+**Programming Python 4th Edition – Mark Lutz – O'Reilly 2011**
+
+**Manual online**  
+
+https://docs.python.org/3.7/tutorial/
+
+https://docs.python.org/3.7/library/index.html
+
+https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
+https://www.crummy.com/software/BeautifulSoup/bs4/doc/
