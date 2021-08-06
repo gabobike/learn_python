@@ -383,7 +383,7 @@ Ejemplo: **Vehiculo.tipo(self)**
 
 Tenemos que tener cuidado cuando trabajamos con argumentos, ya que en ocasiones se pueden dar casos en los cuales se pueden perder argumentos por el cambio y dejar de estar presentes clases que los requieren. En el ejemplo siguiente si la clase Hijo requiere argumentos, estos van a tener que ser ingresados y van a ser pasados a la clase Padre, dado que la clase AbueloPaterno no los requiere, estos se pierden y cuando la clase Madre los requiere ya no están disponibles.
 
-![image-20210806031609473](image-20210806031609473.png)
+![image-20210806031609473](./images/image-20210806031609473.png)
 
 El código del esquema anterior queda como sigue:
 
