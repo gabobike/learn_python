@@ -1,6 +1,6 @@
 # Unidad IV – POO - Programación Orientada a Objetos II
 
-Tematicas
+Tematicas (https://www.youtube.com/watch?v=nQGYJbqOo2M)
 
 1. **Variables y métodos de instancia, de clase, estáticos.**
 2. **Ejemplo 1**
@@ -527,3 +527,195 @@ Notar como la funcion callback1 que imprime un texto en pantalla es pasada como 
 
 Finalmente el botón "B3" no presenta estilos, ya que hereda directamente de HolaButton, pero si tiene función callback asociada ya que esta fue definida dentro de la clase.
 
+``pootemas/boton3.py``
+
+```python
+from tkinter import *
+from boton1 import HolaButton
+
+
+class TemaDeButton():
+    def __init__(self, parent=None, **configs):
+
+        self.myParent = parent
+        self.myParent.geometry("300x300")
+        button = Button(self.myParent, **configs)
+        button.pack()
+        button.config(fg='black', bg='yellow', font=('courier', 12),
+        relief=RAISED, bd=5)
+
+def callback2():
+    print('callback2')
+
+if __name__ == '__main__':
+    root = Tk()
+    B1 = TemaDeButton(root, text='Botón con tema y con callback',
+    command= callback2)
+    B2 = TemaDeButton(root, text='Botón con tema y sin callback')
+    B3 = HolaButton(root, text='Botón sin tema')
+
+    root.mainloop()
+```
+
+Al ejecutar el código anterior, tendríamos que poder ver lo siguiente en pantalla:
+
+![image-20210816133946313](./images/image-20210816133946313.png)
+
+Ahora podríamos crear un botón que herede de la clase que aplica el tema, y además especificar los parámetros del tema en un archivo aparte de forma de hacer la personalización accesible al usuario.
+
+``pootemas/boton4.py``
+
+```python
+from tkinter import *
+from parametrostema import bcolor, bfont, bsize
+from boton1 import HolaButton
+
+
+class TemaDeButton:
+    def __init__(self, parent=None, **configs):
+
+        self.myParent = parent
+        self.myParent.geometry("300x300")
+        button = Button(self.myParent, **configs)
+        button.pack()
+        button.config(bg=bcolor, font=(bfont, bsize))
+
+
+def callback1():
+    print("callback1")
+
+
+def callback2():
+    print("callback2")
+
+
+class MiButton(TemaDeButton):
+    def __init__(self, parent=None, **configs):
+        TemaDeButton.__init__(self, parent, **configs)
+
+
+if __name__ == "__main__":
+    root = Tk()
+    B1 = MiButton(root, text="Botón que hereda de TemaDeButton", command=callback2)
+    B2 = TemaDeButton(root, text="Botón con tema y con callback1", command=callback1)
+    B3 = TemaDeButton(root, text="Botón con tema y con callback2", command=callback2)
+    B4 = HolaButton(root, text="Botón sin tema y con callback")
+    root.mainloop()
+
+```
+
+``pootemas/parametrostema.py``
+
+```python
+bcolor = 'yellow'
+bfont  = 'Arial'
+bsize  = 12
+```
+
+Muestra esta salida ahora se vería así:
+
+![image-20210816135227248](./images/image-20210816135227248.png)
+
+5. Crear contenedores reutilizables - poo-Frame.
+
+Podemos crear también contenedores reutilizables, lo cual es altamente recomendable en grandes aplicaciones, el script consta de una clase que toma un fram y le agrega dos botones. Notar que los botones son agregados como funciones.
+
+``pooframe/frame1.py``
+
+```python
+from tkinter import *
+
+
+class Hola(Frame):
+    def __init__(self, parent=None):
+        Frame.__init__(self, parent)
+        self.pack()
+        self.data = 0
+        self.agregar_boton1()
+        self.agregar_boton2()
+
+    def agregar_boton1(self):
+        widget = Button(self, text="Botón 1!", command=self.valor_de_variable)
+        widget.pack(side=LEFT)
+
+    def agregar_boton2(self):
+        widget = Button(self, text="Botón 2!", command=self.valor_de_variable)
+        widget.pack(side=LEFT)
+
+    def valor_de_variable(self):
+        self.data += 1
+        print("Valor %s!" % self.data)
+
+
+if __name__ == "__main__":
+    Hola().mainloop()
+```
+
+**Nota:** Ambos botones pertenecientes al contenedor al tener acceso a la variable de instancia, recuerdan el valor que esta tiene.
+
+Ahora podemos reutilizar el código en otra aplicación, como se muestra a continuación.
+
+``pooframe/frame2.py``
+
+```python
+from sys import exit
+from tkinter import *
+from frame1 import Hola
+
+root = Tk()
+root.geometry("400x200")
+parent = Frame(root, bg="yellow", width=300, height=100)
+parent.pack(expand=YES, fill=X)
+Hola(parent).pack(side=RIGHT)
+Button(parent, text='Agregado', command=exit).pack(side=LEFT)
+root.mainloop()
+```
+
+Utilizando una programacion orientada a objetos, no tendríamos que tener problemas para comprender el siguiente código.
+
+``pooframe/frame3.py``
+
+```python
+from tkinter import *
+from frame1 import Hola
+
+
+class HolaApp(Frame):
+    def __init__(self, parent=None, **config):
+        self.myParent = parent
+        self.myParent.geometry("500x300")
+
+        button3 = Button(self.myParent, text='Botón3')
+        button3.pack()
+
+        parent = Frame(self.myParent, bg="yellow", width=300, height=100)
+        parent.pack(expand=YES, fill=X)
+
+        Hola(self.myParent).pack(side=RIGHT)
+        button4 = Button(self.myParent, text='Salir', command=exit)
+        button4.pack(side=LEFT)
+
+
+if __name__ == '__main__':
+    root = Tk()
+    miAplicacion = HolaApp(root, text='Hello subclass world')
+    root.mainloop()
+```
+
+
+
+![image-20210816143550619](./images/image-20210816143550619.png)
+
+
+
+
+
+
+
+
+
+Bibliografía utilizada y sugerida    
+Programming Python 5th Edition – Mark Lutz – O'Reilly 2013  
+Programming Python 4th Edition – Mark Lutz – O'Reilly 2011  
+https://docs.python.org/3.7/tutorial/ 
+https://docs.python.org/3.7/library/index.html
